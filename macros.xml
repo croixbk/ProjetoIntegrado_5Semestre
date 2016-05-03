@@ -1,0 +1,28 @@
+<application>
+  <component name="ActionMacroManager">
+    <macro name="teste">
+      <typing text-keycode="57:1;48:1">()</typing>
+      <action id="EditorLeft" />
+      <typing text-keycode="57:1;48:1">()</typing>
+      <action id="EditorLeft" />
+      <typing text-keycode="69:1;68:0;73:0">Edi</typing>
+      <action id="EditorChooseLookupItem" />
+      <action id="EditorRight" />
+      <typing text-keycode="70:0;73:0;78:0">fin</typing>
+      <action id="EditorChooseLookupItem" />
+      <typing text-keycode="82:1">R</typing>
+      <action id="EditorChooseLookupItem" />
+      <typing text-keycode="46:0;73:0">.i</typing>
+      <action id="EditorChooseLookupItem" />
+      <typing text-keycode="46:0">.</typing>
+      <action id="EditorChooseLookupItem" />
+      <action id="EditorRight" />
+      <action id="EditorRight" />
+      <typing text-keycode="46:0;71:0;69:0">.ge</typing>
+      <action id="EditorBackSpace" />
+      <action id="EditorBackSpace" />
+      <action id="EditorBackSpace" />
+      <typing text-keycode="46:0;71:0;69:0;84:0;84:1;69:0;88:0;84:0;57:1;48:1;46:0;84:0;79:0;83:1;84:0;82:0;73:0;78:0;71:0;57:1;48:1;59:0">.getText().toString();</typing>
+    </macro>
+  </component>
+</application>
