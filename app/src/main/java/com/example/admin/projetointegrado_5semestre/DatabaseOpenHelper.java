@@ -11,7 +11,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
  */
 public class DatabaseOpenHelper extends SQLiteAssetHelper {
 
-    public static final String DATABASE_NAME = "projetoIntegradoDB.db";
+    public static final String DATABASE_NAME = "projetoIntegrado.db";
     public static final int DATABASE_VERSION = 1;
 
     public DatabaseOpenHelper(Context context) {

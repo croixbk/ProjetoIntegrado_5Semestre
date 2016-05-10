@@ -8,76 +8,102 @@ import java.util.LinkedHashSet;
 public class Grafo {
 
     int nVertices;
-    int nArestas;
-    float[][] matrizAdjacencia ={
+    float[][] matrizAdjacencia;/* ={
             {Float.POSITIVE_INFINITY, 1 , Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, 1},
             {Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, 1, 2, Float.POSITIVE_INFINITY},
             {Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, 4, 2},
             {3, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY},
             {2, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, 1, Float.POSITIVE_INFINITY}
 
-    };
-
+    };*/
+    float [] distancias;
+    float [] rota;
+    int verticeA;
     public Grafo(){
         nVertices = 5;
-        nArestas = 9;
 
     }
 
-    protected String caminhoMinimo(int verticeA, int verticeB){
-        verticeA = verticeA-1;//-1 para funcionar com os vetores
-        String resultado = "";
+    public Grafo(float[][] matrizAdjacencia){
+        this.matrizAdjacencia = matrizAdjacencia;
+        this.nVertices = matrizAdjacencia.length;
+    }
 
-        float[][] matriz = new float[nVertices][nVertices]; //Copia matriz(trivial)
-        for(int j = 0; j < nVertices; j++){
-            for(int i = 0; i< nVertices ; i++){
-                matriz [i][j] = matrizAdjacencia[i][j];
-            }
-        }
+    protected void caminhoMinimo(int verticeA){
+        if(this.verticeA != verticeA) {
+            this.verticeA = verticeA;
+            verticeA = verticeA - 1;//-1 para funcionar com os vetores
 
-        float[] distancias = new float[nVertices];//inicializacao
-        float[] rota = new float[nVertices];
-        LinkedHashSet<Float> abertos = new LinkedHashSet<>();
-        LinkedHashSet<Float> s = new LinkedHashSet<>();
-        //s.add((float)verticeA);
-        for (int i = 0; i < nVertices ; i++){
-            distancias[i] = Float.POSITIVE_INFINITY;//coloca infinito em todas as dist
-            abertos.add((float)i);//adiciona de 0..n de vertices que representam sua posicao no vetor
-            rota[i] = 0;
-        }
-        distancias[verticeA] = 0;//adiciona 0 a distancia do vertice que sera pego a distancia
-        while (!abertos.isEmpty()){//enquanto ainda tiverem abertos
-            float r = Float.POSITIVE_INFINITY;
-            Float[] temp = abertos.toArray(new Float[abertos.size()]);//transforma os abertos em array para comparacao
-            for(int i = 0; i < abertos.size(); i++){
-                if(r != Math.min(r,distancias[temp[i].intValue()]))//a vertice com menor distancia dentre os abertos eh adicionado a r
-                    r = temp[i].intValue();
 
-            }
-            abertos.remove(r);
-
-            s = new LinkedHashSet<Float>(abertos);
-            s.retainAll(getIncidents((int)r));//deixa somente os adjacentes de r no vetor s
-
-            for (Float i: s) {//para cada i em s
-                float p = Math.min(distancias[i.intValue()],(distancias[(int)r] + matrizAdjacencia[(int)r][i.intValue()]));
-                if(p < distancias[i.intValue()]) {
-                    distancias[i.intValue()] = p;
-                    rota[i.intValue()] = r+1;//+1 para manter a integridade 1....n
+            float[][] matriz = new float[nVertices][nVertices]; //Copia matriz(trivial)
+            for (int j = 0; j < nVertices; j++) {
+                for (int i = 0; i < nVertices; i++) {
+                    matriz[i][j] = matrizAdjacencia[i][j];
                 }
             }
+
+            distancias = new float[nVertices];//inicializacao
+            rota = new float[nVertices];
+            LinkedHashSet<Float> abertos = new LinkedHashSet<>();
+            LinkedHashSet<Float> s = new LinkedHashSet<>();
+            //s.add((float)verticeA);
+            for (int i = 0; i < nVertices; i++) {
+                distancias[i] = Float.POSITIVE_INFINITY;//coloca infinito em todas as dist
+                abertos.add((float) i);//adiciona de 0..n de vertices que representam sua posicao no vetor
+                rota[i] = 0;
+            }
+            distancias[verticeA] = 0;//adiciona 0 a distancia do vertice que sera pego a distancia
+            while (!abertos.isEmpty()) {//enquanto ainda tiverem abertos
+                float r = Float.POSITIVE_INFINITY;
+                Float[] temp = abertos.toArray(new Float[abertos.size()]);//transforma os abertos em array para comparacao
+                for (int i = 0; i < abertos.size(); i++) {
+                    if (r != Math.min(r, distancias[temp[i].intValue()]))//a vertice com menor distancia dentre os abertos eh adicionado a r
+                        r = temp[i].intValue();
+
+                }
+                abertos.remove(r);
+
+                s = new LinkedHashSet<Float>(abertos);
+                s.retainAll(getIncidents((int) r));//deixa somente os adjacentes de r no vetor s
+
+                for (Float i : s) {//para cada i em s
+                    float p = Math.min(distancias[i.intValue()], (distancias[(int) r] + matrizAdjacencia[(int) r][i.intValue()]));
+                    if (p < distancias[i.intValue()]) {
+                        distancias[i.intValue()] = p;
+                        rota[i.intValue()] = r + 1;//+1 para manter a integridade 1....n
+                    }
+                }
+            }
+
         }
 
 
+    }
+
+    public int getDistancia(int verticeB){
+        return (int)distancias[verticeB-1];
+    }
+
+    public LinkedHashSet getRotaTo(int verticeB){
         LinkedHashSet<Integer> temp = new LinkedHashSet<>();
         temp.add(verticeB);
-        resultado += "Rota: [ ";
-        int valorDist = (int)distancias[verticeB-1];
-        for(int i = verticeB-1; i != verticeA; ){
+        for(int i = verticeB-1; i != verticeA-1; ){
             i = (int) rota[i]-1;
             temp.add((i+1));
         }
-        Integer[] resultRota = temp.toArray(new Integer[abertos.size()]);
+        return temp;
+
+    }
+
+    public String imprimirRota(int verticeB){
+        return imprimirRota(getRotaTo(verticeB));
+
+    }
+
+    private String imprimirRota(LinkedHashSet temp){
+        String resultado = "";
+        resultado += "Rota: [ ";
+        Integer[] resultRota = (Integer[]) temp.toArray(new Integer[temp.size()]);
         for(int i = resultRota.length-1; i >= 0; i--){
             if(i == 0)
                 resultado += resultRota[i];
@@ -86,8 +112,17 @@ public class Grafo {
 
         }
 
-        resultado += " ]\nDistancia: [ "+valorDist+" ]";
-        return resultado;
+        resultado += " ]";
+        return  resultado;
+
+    }
+
+    public LinkedHashSet getRotaTotal(){
+        LinkedHashSet<Integer> temp = new LinkedHashSet<>();
+        for (int i = 0; i < rota.length; i++){
+            temp.add((int)rota[i]+1);
+        }
+        return temp;
     }
 
     public LinkedHashSet<Float> getIncidents(int vertice){
