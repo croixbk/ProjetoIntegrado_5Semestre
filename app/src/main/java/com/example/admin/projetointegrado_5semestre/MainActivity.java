@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = doh.getReadableDatabase();
         try{
             spinnerCursor = db.rawQuery("SELECT nome_pops,id_pops _id FROM pops",null);
-            adapter = new SimpleCursorAdapter(getApplicationContext(),
+            adapter = new SimpleCursorAdapter(this,
                     android.R.layout.simple_spinner_item,
                     spinnerCursor,
                     new String[]{"nome_pops"},
