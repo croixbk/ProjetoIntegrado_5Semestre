@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string-array name="custos_array">
+            <item>Hops</item>
+            <item>Distância</item>
+            <item>Custo</item>
+        </string-array>
+</resources>

@@ -1,122 +1,121 @@
 package com.example.admin.projetointegrado_5semestre;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.CursorAdapter;
-import android.widget.EditText;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.LinkedHashSet;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        FragCaminhoMinimo.caminhoMinimoCallBackListener
+        , NavigationView.OnNavigationItemSelectedListener
+        , FragMapa.OnMapPressedListener{
 
-    SimpleCursorAdapter adapter;
-    Spinner spinnerA;
-    Spinner spinnerB;
-
-    Cursor spinnerCursor;
-    int verticeA;
-    int verticeB;
+    Integer[] rotaMapa;
+    int dist;
+    String distText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DatabaseOpenHelper doh = new DatabaseOpenHelper(getApplicationContext());
-        SQLiteDatabase db = doh.getReadableDatabase();
-        try{
-            spinnerCursor = db.rawQuery("SELECT nome_pops,id_pops _id FROM pops",null);
-            adapter = new SimpleCursorAdapter(this,
-                    android.R.layout.simple_spinner_item,
-                    spinnerCursor,
-                    new String[]{"nome_pops"},
-                    new int[]{android.R.id.text1},
-                    SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerA = ((Spinner)findViewById(R.id.spinVertA));
-            spinnerB = ((Spinner)findViewById(R.id.spinVertB));
-            spinnerA.setAdapter(adapter);
-            spinnerB.setAdapter(adapter);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-        }catch (Exception e){
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-        }finally {
-            doh.close();
-            db.close();
-        }
-        spinnerA.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                verticeA = position+1;
-            }
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        spinnerB.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                verticeB = position+1;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    public void imprimeGrafo(View view){
-      //  spinnerA.setSelection(2,false);
-
-        Grafo grafo = new Grafo(gerarMatriz("nr_distancia"));
-
-        grafo.caminhoMinimo(verticeA);
-
-        ((TextView)findViewById(R.id.txtResul)).setText(grafo.imprimirRota(verticeB)+"\n" +
-                "Distancia: [ "+grafo.getDistancia(verticeB)+" ]");
+        FragMapa fragMapa = new FragMapa();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, fragMapa).commit();
 
     }
 
-    public float[][] gerarMatriz(String opt){
-        float[][] resul = null;
-        DatabaseOpenHelper doh = new DatabaseOpenHelper(getApplicationContext());
-        SQLiteDatabase db = doh.getReadableDatabase();
-        Cursor cursor = null;
-        try{
-            cursor = db.query("enlaces", new String[]{"id_enlaces_a","id_enlaces_b",opt}, null, null, null, null,null);
-            resul = new float[20][20];
-            while(cursor.moveToNext()){
-                resul[cursor.getInt(0)][cursor.getInt(1)] = cursor.getInt(2);
-            }
-            for(int i = 0; i < 20; i++){
-                for(int j = 0; j < 20; j++){
-                    if (resul[i][j] <= 0)
-                        resul[i][j] = Float.POSITIVE_INFINITY;
-                }
-            }
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-        }finally {
-            cursor.close();
-            db.close();
-            doh.close();
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            //super.onBackPressed();
         }
+    }
 
-        return resul;
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.nav_opt1){
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragMapa fragMapa = new FragMapa();
+            if(rotaMapa != null){//se existe uma para imprimir no mapa
+                fragMapa.setLinesToDraw(rotaMapa);//antes de iniciar o fragmento prepara a rota que sera desenhada
+                fragMapa.setTotalDist(dist);
+                fragMapa.setDistText(distText);
+            }
+            transaction.replace(R.id.fragmentContainer, fragMapa);
+            transaction.addToBackStack(null);//addToBackStack para poder voltar para tela anterior caso o botao voltar seja precionado
+            transaction.commit();
+            //fecha o drawer após selecionar a opção
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+
+        }else if(id == R.id.nav_opt2) {
+            Snackbar temp = Snackbar.make(findViewById(R.id.fragmentContainer),"",Snackbar.LENGTH_SHORT);
+            temp.show();
+            temp.dismiss();
+            //carrega o fragment
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragCaminhoMinimo fragCaminhoMinimo = new FragCaminhoMinimo();
+            transaction.replace(R.id.fragmentContainer, fragCaminhoMinimo);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+
+        }else if(id == R.id.nav_sobre){
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragSobre fragSobre = new FragSobre();
+            transaction.replace(R.id.fragmentContainer, fragSobre);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        return true;
+    }
+
+    @Override
+    public void OnMapPressed(Uri uri) {
+
+    }
+
+    @Override
+    public void updateMapaInfo(Integer[] rota, int dist, String disText) {
+        rotaMapa = rota;
+        this.distText = disText;
+        this.dist = dist;
     }
 }

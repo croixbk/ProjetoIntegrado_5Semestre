@@ -1,0 +1,191 @@
+ <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.example.admin.projetointegrado_5semestre.MainActivity"
+        android:layout_gravity="left|center_vertical">
+
+     <LinearLayout
+         android:orientation="vertical"
+         android:layout_width="match_parent"
+         android:paddingTop="90dp"
+         android:layout_height="wrap_content"
+         android:id="@+id/linearLayout">
+
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textAppearance="?android:attr/textAppearanceLarge"
+             android:id="@+id/txtResul"
+             android:layout_alignParentTop="true"
+             android:layout_alignParentLeft="true"
+             android:layout_alignParentStart="true"
+             android:paddingBottom="10dp"/>
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="10dp"
+             android:orientation="horizontal">
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textAppearance="?android:attr/textAppearanceLarge"
+                 android:text="Origem: "
+                 android:id="@+id/textView2"
+                 android:layout_above="@+id/textView3"
+                 android:layout_alignParentLeft="true"
+                 android:layout_alignParentStart="true" />
+
+             <Spinner
+                 android:layout_width="200dp"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/spinVertA"
+                 android:spinnerMode="dropdown"
+                 android:layout_alignTop="@+id/textView2"
+                 android:layout_toRightOf="@+id/textView2"
+                 android:layout_toEndOf="@+id/textView2" />
+
+         </LinearLayout>
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal">
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textAppearance="?android:attr/textAppearanceLarge"
+                 android:text="Destino: "
+                 android:id="@+id/textView3"
+                 android:layout_centerVertical="true"
+                 android:layout_alignParentLeft="true"
+                 android:layout_alignParentStart="true" />
+
+
+
+             <Spinner
+                 android:layout_width="200dp"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/spinVertB"
+                 android:layout_alignTop="@+id/textView3"
+                 android:layout_alignLeft="@+id/spinVertA"
+                 android:layout_alignStart="@+id/spinVertA" />
+
+
+         </LinearLayout>
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textAppearance="?android:attr/textAppearanceMedium"
+             android:text="Simular Falha em local"
+             android:id="@+id/textView4"
+             android:layout_marginTop="20dp"/>
+
+         <View
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:background="@android:color/darker_gray"
+             android:id="@+id/view2"
+             android:layout_below="@+id/spinVertB"
+             android:layout_alignParentLeft="true" />
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:paddingTop="4dp"
+             android:orientation="horizontal">
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textAppearance="?android:attr/textAppearanceLarge"
+                 android:text="Local: "
+                 android:id="@+id/textView11"
+                 android:layout_centerVertical="true"
+                 android:layout_alignParentLeft="true"
+                 android:layout_alignParentStart="true" />
+
+
+
+             <Spinner
+                 android:layout_width="200dp"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/spinVertExcluido"
+                 android:layout_alignTop="@+id/textView3"
+                 android:layout_alignLeft="@+id/spinVertA"
+                 android:layout_alignStart="@+id/spinVertA" />
+
+
+         </LinearLayout>
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textAppearance="?android:attr/textAppearanceMedium"
+             android:text="Metricas"
+             android:id="@+id/textView5"
+             android:layout_marginTop="20dp"/>
+
+         <View
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:background="@android:color/darker_gray"
+             android:id="@+id/view"
+             android:layout_below="@+id/spinVertB"
+             android:layout_alignParentLeft="true"
+             android:layout_alignParentStart="true" />
+
+         <RadioGroup
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:paddingTop="4dp"
+             android:orientation="horizontal"
+             android:id="@+id/radioGroup_custos">
+
+             <RadioButton
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Hops"
+                 android:id="@+id/radio_hops"
+                 android:checked="true" />
+
+             <RadioButton
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Distância"
+                 android:id="@+id/radio_distancia"
+                 android:checked="false" />
+
+             <RadioButton
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Custo"
+                 android:id="@+id/radio_custo"
+                 android:checked="false" />
+
+
+         </RadioGroup>
+
+         <Button
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Mostrar Caminho Minimo"
+             android:id="@+id/btn1"
+             android:layout_alignParentBottom="true"
+             android:layout_alignParentLeft="true"
+             android:layout_alignParentStart="true" />
+
+
+     </LinearLayout>
+
+ </RelativeLayout>
