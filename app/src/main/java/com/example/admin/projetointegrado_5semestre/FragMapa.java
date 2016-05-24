@@ -28,12 +28,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragMapa.OnMapPressedListener} interface
- * to handle interaction events.
- */
 public class FragMapa extends Fragment implements OnMapReadyCallback {
 
     LatLng[] lugares = new LatLng[20];
@@ -47,6 +41,8 @@ public class FragMapa extends Fragment implements OnMapReadyCallback {
     public FragMapa() {
         totalDist = -1;
         distText = "";
+        //adiciona todas as posiçoes ao vetor lugares(poderiam ser
+        // pegos do banco alternativamente)
         LatLng manaus = new LatLng(-3.124538, -60.024442);
         LatLng belem = new LatLng(-1.459480, -48.490740);
         LatLng natal = new LatLng(-5.781082, -35.200252);
@@ -150,10 +146,13 @@ public class FragMapa extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(lugares[0]));
     }
 
+    //esse metodo é chamado pelo activity principal quando necessario para desenhar uma rota
     public void setLinesToDraw(Integer[] rota) {
         linesToDraw = new LatLng[rota.length];
         for(Integer i=0; i< rota.length; i++){
-            linesToDraw[i] = lugares[rota[i]-1];//preenche o vetor de rotas com as coordenadas dos vertices (-1 pois os numeros são passados de 1,2...)
+            linesToDraw[i] = lugares[rota[i]-1];
+            //preenche o vetor de rotas com as coordenadas
+            // dos vertices (-1 pois os numeros são passados de 1,2...)
         }
     }
 

@@ -57,7 +57,7 @@ public class FragCaminhoMinimo extends Fragment {
             callBackCaminhoMinimo = (caminhoMinimoCallBackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnTestListener");
+                    + " must implement the Listener");
         }
     }
 
@@ -73,7 +73,7 @@ public class FragCaminhoMinimo extends Fragment {
 
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         metrica = "nr_hop";
-        // pois é a posicão inicial setada no spinner +1(e +1 pela integridade 1...)
+        //vertriceC = 4 pois é a posicão inicial setada no spinner +1(e +1 pela integridade 1...)
         verticeCancelado = 4;
         loadSpinners();
         radioGroup = ((RadioGroup)getView().findViewById(R.id.radioGroup_custos));
@@ -88,7 +88,8 @@ public class FragCaminhoMinimo extends Fragment {
                     metrica = "nr_custo";
             }
         });
-        //não colocar o onClick no XML, se colocar o onClick vai procurar o metodo na activity não no fragmento
+        //não colocar o onClick no XML, se colocar
+        //o onClick vai procurar o metodo na activity não no fragment
         btnImprimirGrafo = ((Button)getView().findViewById(R.id.btn1));
         btnImprimirGrafo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,12 +98,14 @@ public class FragCaminhoMinimo extends Fragment {
             }
         });
     }
+
     //carrega os tres spinners com a informação do banco
     void loadSpinners(){
         DatabaseOpenHelper doh = new DatabaseOpenHelper(getActivity().getApplicationContext());
         SQLiteDatabase db = doh.getReadableDatabase();
         try{
-            //apelida o id_pops de _id pois cursorAdapter precisa obrigatoriamente do campo _id
+            //apelida o id_pops de "_id" pois o cursorAdapter precisa
+            //obrigatoriamente do campo _id para funcionar
             spinnerCursor = db.rawQuery("SELECT nome_pops,id_pops _id FROM pops",null);
             adapter = new SimpleCursorAdapter(getContext(),
                     android.R.layout.simple_spinner_item,
@@ -197,12 +200,15 @@ public class FragCaminhoMinimo extends Fragment {
         else
             distText = "Custo Total: ";
 
-        callBackCaminhoMinimo.updateMapaInfo(
-                //basicamente retorna o caminho adiquirido para activity principal
-                (Integer[]) grafo.getRotaTo(verticeB).toArray(new Integer [grafo.getRotaTo(verticeB).size()])
-            ,grafo.getDistancia(verticeB)
-        , distText );
+        //basicamente retorna o caminho adiquirido para activity principal
 
+        callBackCaminhoMinimo.updateMapaInfo(
+                (Integer[]) grafo.getRotaTo(verticeB).toArray(new Integer [grafo.getRotaTo(verticeB).size()])
+                , grafo.getDistancia(verticeB)
+                , distText );
+
+
+        //pega os nomes dos pops no banco e prepara a string de resultado
         String resul = "";
         Cursor cursor;
         DatabaseOpenHelper dboh = new DatabaseOpenHelper(getActivity().getApplicationContext());
@@ -217,7 +223,7 @@ public class FragCaminhoMinimo extends Fragment {
                 j++;
             }
 
-            j = 0;
+            j = 0;//para reuso da variavel
             while (cursor.moveToNext()){
                 if(cursor.getInt(1)+1 == temp[j]){
                     resul += cursor.getString(0)+",";
@@ -228,9 +234,6 @@ public class FragCaminhoMinimo extends Fragment {
                 }
 
             }
-
-
-
         }catch (Exception e){
             e.printStackTrace();
             Toast.makeText(getActivity().getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
@@ -273,7 +276,6 @@ public class FragCaminhoMinimo extends Fragment {
             db.close();
             doh.close();
         }
-
         return resul;
     }
 

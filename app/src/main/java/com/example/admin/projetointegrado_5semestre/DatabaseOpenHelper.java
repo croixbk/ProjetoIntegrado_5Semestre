@@ -12,10 +12,13 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 public class DatabaseOpenHelper extends SQLiteAssetHelper {
 
     public static final String DATABASE_NAME = "projetoIntegrado.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
 
     public DatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        setForcedUpgrade();
+        //como o banco é somente para leitura no upgrade o banco anterior
+        //é excluido e um novo colocado
     }
 
 }

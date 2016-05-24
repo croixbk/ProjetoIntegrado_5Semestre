@@ -35,18 +35,25 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //preara a toolbar(as tres linhas do lado superior esquerdo)
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+
         toggle.syncState();
 
+        //dentro do drawer layout podem ser usados outros tipos
+        //além do navigation view, como o listView
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        //adiciona o fragmento do mapa no container
         FragMapa fragMapa = new FragMapa();
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, fragMapa).commit();
 

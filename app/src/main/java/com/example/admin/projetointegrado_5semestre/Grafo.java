@@ -16,33 +16,34 @@ public class Grafo {
     int verticeExcluido;
 
     public Grafo(float[][] matrizAdjacencia){
+        //-1 pois no inicio dos tempos nenhum vertice sera excluido
         verticeExcluido = -1;
         this.matrizAdjacencia = matrizAdjacencia;
         this.nVertices = matrizAdjacencia.length;
     }
 
     protected void caminhoMinimo(int verticeA, int verticeExcluido){
-            int nVerticesAtual = nVertices;
             this.verticeA = verticeA;
             this.verticeExcluido = verticeExcluido;
-            verticeA = verticeA - 1;//-1 para funcionar com os vetores
+            verticeA = verticeA - 1;//-1 para funcionar com os vetores(0...)
             verticeExcluido = verticeExcluido -1;
 
 
-            float[][] matriz = new float[nVerticesAtual][nVerticesAtual]; //Copia matriz trivial
-            for (int j = 0; j < nVerticesAtual; j++) {
-                for (int i = 0; i < nVerticesAtual; i++) {
+            float[][] matriz = new float[nVertices][nVertices]; //Copia matriz para possiveis mudanças
+            for (int j = 0; j < nVertices; j++) {
+                for (int i = 0; i < nVertices; i++) {
                     matriz[i][j] = matrizAdjacencia[i][j];
                 }
             }
 
-            if(verticeExcluido > -1) {//se o vertice excluido é valido
-
-                for (int j = 0; j < nVerticesAtual; j++) {
+            if(verticeExcluido > -1) {//se o vertice excluido é valido(ou existe)
+                //todos os vertices que incidem ou são incididos por ele recebem infinito
+                //anulando assim seu uso como caminho minimo
+                for (int j = 0; j < nVertices; j++) {
                     if(matriz[verticeExcluido][j] < Float.POSITIVE_INFINITY)
                         matriz[verticeExcluido][j] = Float.POSITIVE_INFINITY;
                 }
-                for (int i = 0; i < nVerticesAtual; i++) {
+                for (int i = 0; i < nVertices; i++) {
                     if(matriz[i][verticeExcluido] < Float.POSITIVE_INFINITY)
                         matriz[i][verticeExcluido] = Float.POSITIVE_INFINITY;
                 }
@@ -50,18 +51,19 @@ public class Grafo {
             }
 
 
-            distancias = new float[nVerticesAtual];//inicializacao
+            distancias = new float[nVertices];//inicializacao
             rota = new float[nVertices];
             LinkedHashSet<Float> abertos = new LinkedHashSet<>();
             LinkedHashSet<Float> s = new LinkedHashSet<>();
             //s.add((float)verticeA);
-            for (int i = 0; i < nVerticesAtual; i++) {
+            for (int i = 0; i < nVertices; i++) {
                 distancias[i] = Float.POSITIVE_INFINITY;//coloca infinito em todas as dist
                 abertos.add((float) i);//adiciona de 0..n de vertices que representam sua posicao no vetor
 
             }
 
             distancias[verticeA] = 0;//adiciona 0 a distancia do vertice que sera pego a distancia
+
             while (!abertos.isEmpty()) {//enquanto ainda tiverem abertos
                 float r = Float.POSITIVE_INFINITY;
                 Float[] temp = abertos.toArray(new Float[abertos.size()]);//transforma os abertos em array para comparacao
@@ -71,7 +73,9 @@ public class Grafo {
 
                 }
 
-                //se o r for infinito ele é o vertice excluido e todos os outros foram verificados então fim do algoritmo
+                //se o r for infinito os abertos só contem um vertice
+                //e ele é o vertice excluido,
+                //todos os outros foram verificados logo fim do algoritmo
                 if(r == Float.POSITIVE_INFINITY)
                     break;
 
@@ -92,10 +96,12 @@ public class Grafo {
 
     }
 
+    //retorna a distancia para um vertice
     public int getDistancia(int verticeB){
         return (int) distancias[verticeB-1];
     }
 
+    //retorna uma lista hash com o caminho para o vertice b
     public LinkedHashSet getRotaTo(int verticeB){
         LinkedHashSet<Integer> temp = new LinkedHashSet<>();
         temp.add(verticeB);
@@ -107,10 +113,13 @@ public class Grafo {
 
     }
 
+    //imprime a rota no formato [1,2,3....] onde os numeros são as
+    //posiçoes dos vertices a partir de 1(não 0)
     public String imprimirRota(int verticeB){
         return imprimirRota(getRotaTo(verticeB));
 
     }
+
 
     private String imprimirRota(LinkedHashSet temp){
         String resultado = "";
@@ -129,6 +138,7 @@ public class Grafo {
 
     }
 
+    //retorna a o vetor de rotas como lista hash
     public LinkedHashSet getRotaTotal(){
         LinkedHashSet<Integer> temp = new LinkedHashSet<>();
         for (int i = 0; i < rota.length; i++){
@@ -140,7 +150,9 @@ public class Grafo {
     public LinkedHashSet<Float> getVizinhos(int vertice, float[][] matriz){
         LinkedHashSet<Float> resul = new LinkedHashSet<Float>();
         for (int i = 0; i < matriz.length; i++){
-            if (matriz[vertice][i] != Float.POSITIVE_INFINITY && !resul.contains(i))
+            //faz duas vezes pois e um grafo nao direcionado logo deve se checar coluna e linha
+            //(trivial na maioria das vezes)
+            if (matriz[vertice][i] != Float.POSITIVE_INFINITY && !resul.contains(i))//adiciona somente se ele jã não existir
                 resul.add((float) i);
             if (matriz[i][vertice] != Float.POSITIVE_INFINITY && !resul.contains(i))
                 resul.add((float) i);
