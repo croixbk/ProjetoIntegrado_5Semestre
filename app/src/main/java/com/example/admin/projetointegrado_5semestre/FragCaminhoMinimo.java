@@ -42,9 +42,24 @@ public class FragCaminhoMinimo extends Fragment {
 
     caminhoMinimoCallBackListener callBackCaminhoMinimo;
 
+    //valor padrao dos vertices caso não informados
+    public FragCaminhoMinimo(){
+        verticeA = 0;
+        verticeB = 0;
+        verticeCancelado = 4;
+
+    }
+
+    //opcionalmente podem ser inseridos para mudar o valor default nos spinners
+    public void carregarDados(int vertA, int vertB, int vertExclu){
+        verticeA = vertA;
+        verticeB = vertB;
+        verticeCancelado = vertExclu;
+    }
+
     public interface caminhoMinimoCallBackListener{
         public void updateMapaInfo(Integer[] rota, int dist, String disText);
-
+        public void salvarDados(int vertA, int vertB, int vertExclu);
     }
 
     @Override
@@ -73,8 +88,6 @@ public class FragCaminhoMinimo extends Fragment {
 
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         metrica = "nr_hop";
-        //vertriceC = 4 pois é a posicão inicial setada no spinner +1(e +1 pela integridade 1...)
-        verticeCancelado = 4;
         loadSpinners();
         radioGroup = ((RadioGroup)getView().findViewById(R.id.radioGroup_custos));
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -97,6 +110,7 @@ public class FragCaminhoMinimo extends Fragment {
                 imprimeGrafo(v);
             }
         });
+        callBackCaminhoMinimo.salvarDados(verticeA,verticeB,verticeCancelado);
     }
 
     //carrega os tres spinners com a informação do banco
@@ -120,7 +134,9 @@ public class FragCaminhoMinimo extends Fragment {
             spinnerA.setAdapter(adapter);
             spinnerB.setAdapter(adapter);
             spinnerExcluir.setAdapter(adapter);
-            spinnerExcluir.setSelection(3);
+            spinnerExcluir.setSelection(verticeCancelado-1);
+            spinnerA.setSelection(verticeA-1);
+            spinnerB.setSelection(verticeB-1);
 
 
         }catch (Exception e){
@@ -141,6 +157,10 @@ public class FragCaminhoMinimo extends Fragment {
                     Snackbar.make(getView(), "Vertices com falha na origem ou destino não serão considerados", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
+                if(verticeCancelado == -1)
+                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition());
+                else
+                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,verticeCancelado);
             }
 
             @Override
@@ -158,6 +178,10 @@ public class FragCaminhoMinimo extends Fragment {
                     Snackbar.make(getView(), "Vertices com falha na origem ou destino não serão considerados", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
+                if(verticeCancelado == -1)
+                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition());
+                else
+                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,verticeCancelado);
             }
 
             @Override
@@ -176,6 +200,10 @@ public class FragCaminhoMinimo extends Fragment {
                     Snackbar.make(getView(), "Vertices com falha na origem ou destino não serão considerados", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
+                if(verticeCancelado == -1)
+                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition());
+                else
+                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,verticeCancelado);
             }
 
             @Override
@@ -189,6 +217,13 @@ public class FragCaminhoMinimo extends Fragment {
     public void imprimeGrafo(View view){
         String distText = "";
         Grafo grafo = new Grafo(gerarMatriz(metrica));
+
+        if(verticeCancelado == verticeA || verticeCancelado == verticeB){
+            //invalida o vertice se ele for igual a origem ou destino
+            verticeCancelado = -1;
+            Snackbar.make(getView(), "Vertices com falha na origem ou destino não serão considerados", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
 
         grafo.caminhoMinimo(verticeA,verticeCancelado);
 
@@ -206,7 +241,6 @@ public class FragCaminhoMinimo extends Fragment {
                 (Integer[]) grafo.getRotaTo(verticeB).toArray(new Integer [grafo.getRotaTo(verticeB).size()])
                 , grafo.getDistancia(verticeB)
                 , distText );
-
 
         //pega os nomes dos pops no banco e prepara a string de resultado
         String resul = "";
@@ -244,7 +278,7 @@ public class FragCaminhoMinimo extends Fragment {
 
 
         ((TextView)getView().findViewById(R.id.txtResul)).setText(resul+"\n" +
-                distText+ "[ "+grafo.getDistancia(verticeB)+" ]"+"\n"+"Rota Teste: "+grafo.imprimirRota(verticeB));
+                distText+ "[ "+grafo.getDistancia(verticeB)+" ]");
 
     }
 

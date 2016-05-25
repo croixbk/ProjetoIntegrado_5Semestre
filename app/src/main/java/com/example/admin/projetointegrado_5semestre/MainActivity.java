@@ -29,11 +29,16 @@ public class MainActivity extends AppCompatActivity implements
     Integer[] rotaMapa;
     int dist;
     String distText;
+    int oldVertA, oldVertB, oldVertExclu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        oldVertA = -1;
+        oldVertB = -1;
+        oldVertExclu = -1;
 
         //preara a toolbar(as tres linhas do lado superior esquerdo)
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -96,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements
             //carrega o fragment
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             FragCaminhoMinimo fragCaminhoMinimo = new FragCaminhoMinimo();
+            if(oldVertA != -1)
+                fragCaminhoMinimo.carregarDados(oldVertA,oldVertB,oldVertExclu);
             transaction.replace(R.id.fragmentContainer, fragCaminhoMinimo);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -124,5 +131,12 @@ public class MainActivity extends AppCompatActivity implements
         rotaMapa = rota;
         this.distText = disText;
         this.dist = dist;
+    }
+
+    @Override
+    public void salvarDados(int vertA, int vertB, int vertExclu) {
+        oldVertA = vertA;
+        oldVertB = vertB;
+        oldVertExclu = vertExclu;
     }
 }
