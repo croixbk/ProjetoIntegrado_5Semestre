@@ -1,65 +1,129 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.admin.projetointegrado_5semestre.FragSobre"
     android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Grupo:"
+                android:id="@+id/textView6"
+                android:paddingTop="55dp"
+                android:layout_gravity="center_horizontal" />
 
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Yuri Fernando Simões Arce"
+                android:id="@+id/textView7"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="30dp"
+                android:layout_weight="2"
+                android:layout_gravity="center_horizontal" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text=" RGM: 141718-5"
+                android:id="@+id/textView12"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_weight="2"
+                android:layout_gravity="center_horizontal" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:id="@+id/view4"
+                android:paddingTop="30dp"
+                android:layout_below="@+id/spinVertB"
+                android:layout_alignParentLeft="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Fabio Nunes Cerqueira"
+                android:id="@+id/textView13"
+                android:paddingTop="30dp"
+
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_weight="2"
+                android:layout_gravity="center_horizontal" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="RGM: 133322-4"
+                android:id="@+id/textView14"
+                android:paddingLeft="20dp"
+                android:layout_weight="2"
+                android:paddingRight="20dp"
+                android:paddingBottom="20dp"
+                android:layout_gravity="center_horizontal" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:id="@+id/view5"
+                android:layout_below="@+id/spinVertB"
+                android:layout_alignParentLeft="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Hugo Dutra Profirio"
+                android:paddingLeft="20dp"
+                android:paddingTop="30dp"
+                android:layout_weight="2"
+                android:paddingRight="20dp"
+                android:id="@+id/textView9"
+                android:layout_gravity="center_horizontal" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="RGM: 144402-6"
+                android:layout_weight="2"
+                android:id="@+id/textView8"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="20dp"
+                android:layout_gravity="center_horizontal" />
+
+
+        </LinearLayout>
+    </ScrollView>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Grupo:"
-        android:id="@+id/textView6"
-        android:paddingTop="60dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Yuri Fernando Simões Arce
-        RGM: 141718-5"
-        android:id="@+id/textView7"
-        android:paddingTop="10dp"
         android:paddingLeft="20dp"
-        android:layout_weight="2"
         android:paddingRight="20dp"
-        android:layout_gravity="center_horizontal" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Fabio Nunes Cerqueira
-        RGM: 1223334"
-        android:id="@+id/textView8"
-        android:layout_weight="2"
-        android:paddingTop="10dp"
-        android:layout_gravity="center_horizontal" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Hugo Dutra Porfirio
-        RGM: 435435444"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:layout_weight="2"
-        android:id="@+id/textView9"
-        android:paddingTop="10dp"
-        android:layout_gravity="center_horizontal" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:paddingTop="30dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Trabalho feito usando o algoritmo de Dijkstra"
         android:id="@+id/textView10"
-        android:layout_weight="2"
         android:layout_gravity="center"
-        />
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        android:layout_weight="2"
+        android:paddingBottom="20dp"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>

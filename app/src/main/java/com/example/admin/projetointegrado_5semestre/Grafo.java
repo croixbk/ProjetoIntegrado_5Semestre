@@ -67,7 +67,7 @@ public class Grafo {
             while (!abertos.isEmpty()) {//enquanto ainda tiverem abertos
                 float r = Float.POSITIVE_INFINITY;
                 Float[] temp = abertos.toArray(new Float[abertos.size()]);//transforma os abertos em array para comparacao
-                for (int i = 0; i < abertos.size(); i++) {
+                for (int i = abertos.size()-1; i >= 0; i--) {
                     if (r != Math.min(r, distancias[temp[i].intValue()]))//a vertice com menor distancia dentre os abertos eh adicionado a r
                         r = temp[i].intValue();
 
@@ -138,7 +138,7 @@ public class Grafo {
 
     }
 
-    //retorna a o vetor de rotas como lista hash
+    //retorna o vetor de rotas como lista hash
     public LinkedHashSet getRotaTotal(){
         LinkedHashSet<Integer> temp = new LinkedHashSet<>();
         for (int i = 0; i < rota.length; i++){

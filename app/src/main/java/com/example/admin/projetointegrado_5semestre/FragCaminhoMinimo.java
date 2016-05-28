@@ -1,12 +1,9 @@
 package com.example.admin.projetointegrado_5semestre;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -20,9 +17,6 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 
 
 public class FragCaminhoMinimo extends Fragment {
@@ -80,7 +74,7 @@ public class FragCaminhoMinimo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragmento_teste, container, false);
+        return inflater.inflate(R.layout.fragment_fragmento_custo_minimo, container, false);
 
     }
 
@@ -110,7 +104,6 @@ public class FragCaminhoMinimo extends Fragment {
                 imprimeGrafo(v);
             }
         });
-        callBackCaminhoMinimo.salvarDados(verticeA,verticeB,verticeCancelado);
     }
 
     //carrega os tres spinners com a informação do banco
@@ -158,7 +151,7 @@ public class FragCaminhoMinimo extends Fragment {
                             .setAction("Action", null).show();
                 }
                 if(verticeCancelado == -1)
-                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition());
+                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition()+1);
                 else
                     callBackCaminhoMinimo.salvarDados(verticeA,verticeB,verticeCancelado);
             }
@@ -179,7 +172,7 @@ public class FragCaminhoMinimo extends Fragment {
                             .setAction("Action", null).show();
                 }
                 if(verticeCancelado == -1)
-                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition());
+                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition()+1);
                 else
                     callBackCaminhoMinimo.salvarDados(verticeA,verticeB,verticeCancelado);
             }
@@ -201,7 +194,7 @@ public class FragCaminhoMinimo extends Fragment {
                             .setAction("Action", null).show();
                 }
                 if(verticeCancelado == -1)
-                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition());
+                    callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition()+1);
                 else
                     callBackCaminhoMinimo.salvarDados(verticeA,verticeB,verticeCancelado);
             }
@@ -224,7 +217,7 @@ public class FragCaminhoMinimo extends Fragment {
             Snackbar.make(getView(), "Vertices com falha na origem ou destino não serão considerados", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
-
+        callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition()+1);
         grafo.caminhoMinimo(verticeA,verticeCancelado);
 
         //prepara o texto de exibição de acordo com a metrica
@@ -258,14 +251,17 @@ public class FragCaminhoMinimo extends Fragment {
             }
 
             j = 0;//para reuso da variavel
-            while (cursor.moveToNext()){
+            cursor.moveToFirst();
+            while (j < temp.length){
                 if(cursor.getInt(1)+1 == temp[j]){
-                    resul += cursor.getString(0)+",";
-                    cursor.moveToFirst();
+                    if(j == temp.length-1)
+                        resul += cursor.getString(0);
+                    else
+                        resul += cursor.getString(0)+",";
                     j++;
-                    if(j >= temp.length)
-                        break;
-                }
+                    cursor.moveToFirst();
+                }else
+                    cursor.moveToNext();
 
             }
         }catch (Exception e){
