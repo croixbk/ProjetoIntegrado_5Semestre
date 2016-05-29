@@ -218,7 +218,7 @@ public class FragCaminhoMinimo extends Fragment {
                     .setAction("Action", null).show();
         }
         callBackCaminhoMinimo.salvarDados(verticeA,verticeB,spinnerExcluir.getSelectedItemPosition()+1);
-        grafo.caminhoMinimo(verticeA,verticeCancelado);
+        grafo.caminhoMinimo(verticeA,verticeB,verticeCancelado);
 
         //prepara o texto de exibição de acordo com a metrica
         if(metrica.equals("nr_hop") )
